@@ -27,6 +27,7 @@
                                     <v-checkbox
                                         :input-value="order.done"
                                         @change="markDone(order)"
+                                        :disabled="order.done"
                                         color="success"
                                     ></v-checkbox>
                                 </v-list-item-action>

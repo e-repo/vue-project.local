@@ -29,7 +29,7 @@
                             class="white--text"
                             height="200px"
                             max-width="344"
-                            :src="ad.imageSrc"
+                            :src="ad.imageCardSrc"
                         >
                             <v-card-title class="align-end fill-height">{{ad.title}}</v-card-title>
                         </v-img>
@@ -63,21 +63,24 @@
                         title: 'Title1',
                         description: 'description1',
                         promo: false,
-                        imageSrc: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
+                        imageSrc: 'https://via.placeholder.com/1200x600/OOOOOO/FFFFFF?text=Slider1',
+                        imageCardSrc: 'https://via.placeholder.com/400x300/OOOOOO/FFFFFF?text=Cart1',
                         id: 123
                     },
                     {
                         title: 'Title2',
                         description: 'description2',
                         promo: false,
-                        imageSrc: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
+                        imageSrc: 'https://via.placeholder.com/1200x600/OOOOOO/FFFFFF?text=Slider1',
+                        imageCardSrc: 'https://via.placeholder.com/400x300/OOOOOO/FFFFFF?text=Cart2',
                         id: 124
                     },
                     {
                         title: 'Title3',
                         description: 'description3',
                         promo: false,
-                        imageSrc: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
+                        imageSrc: 'https://via.placeholder.com/1200x600/OOOOOO/FFFFFF?text=Slider1',
+                        imageCardSrc: 'https://via.placeholder.com/400x300/OOOOOO/FFFFFF?text=Cart3',
                         id: 125
                     },
                 ]

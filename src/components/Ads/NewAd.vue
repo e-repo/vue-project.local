@@ -3,7 +3,7 @@
         <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
                 <h1 class="text--secondary" mb3>Create new ad</h1>
-                <v-form v-model="valid" ref="form" lazy-validation>
+                <v-form v-model="valid" ref="form">
                     <v-text-field
                             name="title"
                             label="Ad title"
@@ -39,7 +39,25 @@
         </v-layout>
         <v-layout class="mt-3">
             <v-flex xs-12 sm6 offset-sm3>
-                <img src="https://via.placeholder.com/400x300/OOOOOO/FFFFFF?text=Image" height="150" alt="">
+                <img src="" height="100" alt="">
+            </v-flex>
+        </v-layout>
+        <v-layout class="mt-3">
+            <v-flex xs-12 sm6 offset-sm3>
+                <v-switch
+                    v-model="promo"
+                    label="Add to promo?"
+                ></v-switch>
+            </v-flex>
+        </v-layout>
+        <v-layout>
+            <v-flex xs-12 sm6 offset-sm3>
+                <v-spacer></v-spacer>
+                <v-btn
+                    class="success"
+                    @click="createAd"
+                    :disabled="!valid"
+                >Create ad</v-btn>
             </v-flex>
         </v-layout>
     </v-container>
@@ -49,9 +67,25 @@
     export default {
         name: "NewAd",
         data: () => ({
-                title: '',
-                description: ''
-        })
+            title: '',
+            description: '',
+            promo: false,
+            valid: false
+        }),
+        methods: {
+            createAd () {
+                if (this.$refs.form.validate()) {
+                    // logic
+                    const ad = {
+                        title: this.title,
+                        description: this.description,
+                        promo: this.promo
+                    }
+
+                    console.log(ad)
+                }
+            }
+        }
     }
 </script>
 

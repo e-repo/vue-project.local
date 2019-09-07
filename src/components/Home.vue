@@ -5,7 +5,7 @@
                 <v-flex xs12>
                     <v-carousel>
                         <v-carousel-item
-                                v-for="(ad, i) in ads"
+                                v-for="(ad, i) in promoAds"
                                 :key="i"
                                 :src="ad.imageSrc"
                         >
@@ -56,34 +56,12 @@
 <script>
     export default {
         name: "Home",
-        data () {
-            return {
-                ads: [
-                    {
-                        title: 'Title1',
-                        description: 'description1',
-                        promo: false,
-                        imageSrc: 'https://via.placeholder.com/1200x600/OOOOOO/FFFFFF?text=Slider1',
-                        imageCardSrc: 'https://via.placeholder.com/400x300/OOOOOO/FFFFFF?text=Cart1',
-                        id: 123
-                    },
-                    {
-                        title: 'Title2',
-                        description: 'description2',
-                        promo: false,
-                        imageSrc: 'https://via.placeholder.com/1200x600/OOOOOO/FFFFFF?text=Slider1',
-                        imageCardSrc: 'https://via.placeholder.com/400x300/OOOOOO/FFFFFF?text=Cart2',
-                        id: 124
-                    },
-                    {
-                        title: 'Title3',
-                        description: 'description3',
-                        promo: false,
-                        imageSrc: 'https://via.placeholder.com/1200x600/OOOOOO/FFFFFF?text=Slider1',
-                        imageCardSrc: 'https://via.placeholder.com/400x300/OOOOOO/FFFFFF?text=Cart3',
-                        id: 125
-                    },
-                ]
+        computed: {
+            promoAds () {
+                return this.$store.getters.promoAds
+            },
+            ads () {
+                return this.$store.getters.ads;
             }
         }
     }

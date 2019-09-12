@@ -3,14 +3,14 @@
         <v-layout row>
             <v-flex xs12>
                 <v-card>
-                    <v-img src="https://via.placeholder.com/1200x600/OOOOOO/FFFFFF?text=Img1" height="300px"></v-img>
+                    <v-img :src="ad.imageSrc" height="300px"></v-img>
                     <v-card-text>
-                        <h1 class="text--primary">Lorem</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi, reiciendis.</p>
+                        <h1 class="text--primary">{{ad.title}}</h1>
+                        <p>{{ad.description}}</p>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn class="warning" flat>Edit</v-btn>
+                        <v-btn class="warning flat">Edit</v-btn>
                         <v-btn class="success">Buy</v-btn>
                     </v-card-actions>
                 </v-card>
@@ -21,7 +21,19 @@
 
 <script>
     export default {
-        name: "Ad"
+        name: "Ad",
+        /**
+         * Получаем id через router
+         * В файле router.js для роута (path: '/ad/:id')
+         * установленно свойство (props: true)
+         */
+        props: ['id'],
+        computed: {
+            ad () {
+                const id = +this.id; // пример доступа к props: ['id']
+                return this.$store.getters.adById(id)
+            }
+        }
     }
 </script>
 

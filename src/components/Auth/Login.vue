@@ -34,7 +34,8 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn
-                            :disabled="!valid"
+                            :disabled="!valid || loading"
+                            :loading="loading"
                             color="primary"
                             @click="onSubmitHandler"
                         >Login</v-btn>
@@ -67,6 +68,11 @@
                 valid: false,
             }
         },
+        computed: {
+            loading () {
+                return this.$store.getters.loading
+            }
+        },
         methods: {
             onSubmitHandler () {
                 if (this.$refs.form.validate()) {
@@ -75,7 +81,11 @@
                         password: this.password
                     }
 
-                    console.log(user)
+                    this.$store.dispatch('loginUser', user)
+                        .then(() => {
+                            this.$router.push('/')
+                        })
+                        .catch(e => {console.log(e)})
                 }
             }
         }

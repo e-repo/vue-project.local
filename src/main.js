@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store/index'
 import vuetify from './plugins/vuetify';
+import * as fb from 'firebase'
 import '@babel/polyfill'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
@@ -13,5 +14,16 @@ new Vue({
   router,
   vuetify,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  created() {
+    fb.initializeApp({
+      apiKey: "AIzaSyDY5wPH8M6zkq5CiQoJ9_qf6icjuXwUgvo",
+      authDomain: "vue-ads-project-7e63f.firebaseapp.com",
+      databaseURL: "https://vue-ads-project-7e63f.firebaseio.com",
+      projectId: "vue-ads-project-7e63f",
+      storageBucket: "",
+      messagingSenderId: "892232356523",
+      appId: "1:892232356523:web:c53bd494fb1cec02389dee"
+    })
+  }
 }).$mount('#app')

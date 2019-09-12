@@ -43,8 +43,9 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn
-                                :disabled="!valid"
+                                :disabled="!valid || loading"
                                 color="primary"
+                                :loading="loading"
                                 @click="onSubmitHandler"
                         >Registration</v-btn>
                     </v-card-actions>
@@ -81,6 +82,11 @@
                 valid: false,
             }
         },
+        computed: {
+            loading () {
+                return this.$store.getters.loading
+            }
+        },
         methods: {
             onSubmitHandler () {
                 if (this.$refs.form.validate()) {
@@ -89,7 +95,11 @@
                         password: this.password
                     }
 
-                    console.log(user)
+                    this.$store.dispatch('registerUser', user)
+                        .then(() => {
+                            this.$router.push('/')
+                        })
+                        .catch(e => {console.log(e)})
                 }
             }
         }

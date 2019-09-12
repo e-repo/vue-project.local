@@ -79,10 +79,12 @@
                     const ad = {
                         title: this.title,
                         description: this.description,
-                        promo: this.promo
+                        promo: this.promo,
+                        imageSrc: 'https://s14.stc.all.kpcdn.net/share/i/12/10240851/inx960x640.jpg',
+                        imageCardSrc: 'https://s14.stc.all.kpcdn.net/share/i/12/10240851/inx960x640.jpg'
                     }
 
-                    console.log(ad)
+                    this.$store.dispatch('createAd', ad)
                 }
             }
         }

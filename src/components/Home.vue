@@ -29,7 +29,7 @@
                             class="white--text"
                             height="200px"
                             max-width="344"
-                            :src="ad.imageCardSrc"
+                            :src="ad.imageSrc"
                         >
                             <v-card-title class="align-end fill-height">{{ad.title}}</v-card-title>
                         </v-img>

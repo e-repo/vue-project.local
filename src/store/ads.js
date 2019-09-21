@@ -1,3 +1,16 @@
+import * as fb from 'firebase'
+
+class Ad {
+    constructor (payload) {
+        this.title          = payload.title
+        this.description    = payload.description
+        this.ownerId        = payload.ownerId
+        this.imageSrc       = payload.imageSrc
+        this.promo          = payload.promo ? payload.promo : false
+        this.id             = payload.id ? payload.id : null
+    }
+}
+
 export default {
     state: {
         ads: [
@@ -6,7 +19,6 @@ export default {
                 description: 'description1',
                 promo: true,
                 imageSrc: 'https://via.placeholder.com/1200x600/OOOOOO/FFFFFF?text=Slider1',
-                imageCardSrc: 'https://via.placeholder.com/400x300/OOOOOO/FFFFFF?text=Cart1',
                 id: 123
             },
             {
@@ -14,7 +26,6 @@ export default {
                 description: 'description2',
                 promo: true,
                 imageSrc: 'https://via.placeholder.com/1200x600/OOOOOO/FFFFFF?text=Slider2',
-                imageCardSrc: 'https://via.placeholder.com/400x300/OOOOOO/FFFFFF?text=Cart2',
                 id: 124
             },
             {
@@ -22,7 +33,6 @@ export default {
                 description: 'description3',
                 promo: false,
                 imageSrc: 'https://via.placeholder.com/1200x600/OOOOOO/FFFFFF?text=Slider3',
-                imageCardSrc: 'https://via.placeholder.com/400x300/OOOOOO/FFFFFF?text=Cart3',
                 id: 125
             },
         ]
@@ -33,10 +43,21 @@ export default {
         }
     },
     actions: {
-        createAd ({commit, state}, payload) {
-            const indexAd = state.ads.length - 1
-            payload.id = state.ads[indexAd].id + 1;
-            commit('createAd', payload)
+        async createAd ({commit, getters}, payload) {
+            commit('clearError')
+            commit('setLoading', true)
+
+            try {
+                payload.ownerId = getters.user.id
+                const newAd = new Ad(payload)
+
+                const fbVal = await fb.database().ref('ads').push(newAd)
+                console.log(fbVal)
+            } catch (e) {
+                commit('setError', e.message)
+                commit('setLoading', false)
+                throw e
+            }
         }
     },
     getters: {

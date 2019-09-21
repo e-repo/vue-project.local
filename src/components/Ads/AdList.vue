@@ -37,13 +37,16 @@
 </template>
 
 <script>
+    import AuthGuard from '../../router/auth-guard'
+
     export default {
         name: "AdList",
         computed: {
             myAds () {
                 return this.$store.getters.myAds
             }
-        }
+        },
+        beforeRouteEnter: AuthGuard
     }
 </script>
 

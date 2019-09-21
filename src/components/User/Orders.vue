@@ -52,6 +52,8 @@
 </template>
 
 <script>
+    import AuthGuard from '../../router/auth-guard'
+
     export default {
         name: "Orders",
         data: () => ({
@@ -69,7 +71,8 @@
             markDone(order) {
                 order.done = true
             }
-        }
+        },
+        beforeRouteEnter: AuthGuard
     }
 </script>
 

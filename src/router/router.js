@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import AuthGuard from './auth-guard'
 import Home from '@/components/Home'
 import Registration from '@/components/Auth/Registration'
 import Login from '@/components/Auth/Login'
@@ -48,7 +49,7 @@ export default new Router({
     {
       path: '/orders',
       name: 'Orders',
-      component: Orders
+      component: Orders,
     },
   ]
 })

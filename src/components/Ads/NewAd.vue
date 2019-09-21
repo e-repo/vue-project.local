@@ -64,6 +64,8 @@
 </template>
 
 <script>
+    import AuthGuard from '../../router/auth-guard'
+
     export default {
         name: "NewAd",
         data: () => ({
@@ -80,14 +82,14 @@
                         title: this.title,
                         description: this.description,
                         promo: this.promo,
-                        imageSrc: 'https://s14.stc.all.kpcdn.net/share/i/12/10240851/inx960x640.jpg',
-                        imageCardSrc: 'https://s14.stc.all.kpcdn.net/share/i/12/10240851/inx960x640.jpg'
+                        imageSrc: 'https://s14.stc.all.kpcdn.net/share/i/12/10240851/inx960x640.jpg'
                     }
 
                     this.$store.dispatch('createAd', ad)
                 }
             }
-        }
+        },
+        beforeRouteEnter: AuthGuard
     }
 </script>
 

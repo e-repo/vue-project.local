@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
+import router from './router/router'
 import store from './store/index'
 import vuetify from './plugins/vuetify';
 import * as fb from 'firebase'
@@ -24,6 +24,12 @@ new Vue({
       storageBucket: "",
       messagingSenderId: "892232356523",
       appId: "1:892232356523:web:c53bd494fb1cec02389dee"
+    })
+
+    fb.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.$store.dispatch('autoLoginUser', user)
+      }
     })
   }
 }).$mount('#app')

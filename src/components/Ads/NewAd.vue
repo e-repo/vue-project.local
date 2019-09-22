@@ -56,7 +56,8 @@
                 <v-btn
                     class="success"
                     @click="createAd"
-                    :disabled="!valid"
+                    :loading="loading"
+                    :disabled="!valid || loading"
                 >Create ad</v-btn>
             </v-flex>
         </v-layout>
@@ -86,7 +87,16 @@
                     }
 
                     this.$store.dispatch('createAd', ad)
+                        .then(() => {
+                            this.$router.push('/list')
+                        })
+                        .catch(() => {})
                 }
+            }
+        },
+        computed: {
+            loading () {
+                return this.$store.getters.loading
             }
         },
         beforeRouteEnter: AuthGuard

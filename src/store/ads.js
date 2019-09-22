@@ -49,10 +49,12 @@ export default {
 
             try {
                 payload.ownerId = getters.user.id
-                const newAd = new Ad(payload)
 
-                const fbVal = await fb.database().ref('ads').push(newAd)
-                console.log(fbVal)
+                const newAd = new Ad(payload)
+                const ad = await fb.database().ref('ads').push(newAd)
+
+                commit('setLoading', false)
+                commit('createAd', {...newAd, id: ad.key})
             } catch (e) {
                 commit('setError', e.message)
                 commit('setLoading', false)

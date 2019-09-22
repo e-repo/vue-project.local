@@ -30,7 +30,7 @@
         props: ['id'],
         computed: {
             ad () {
-                const id = +this.id; // пример доступа к props: ['id']
+                const id = this.id; // пример доступа к props: ['id']
                 return this.$store.getters.adById(id)
             }
         }

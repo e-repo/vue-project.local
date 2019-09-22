@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap">
+    <div class="wrap" v-if="!loading">
         <v-container fluid>
             <v-layout>
                 <v-flex xs12>
@@ -51,6 +51,14 @@
             </v-layout>
         </v-container>
     </div>
+    <div v-else>
+        <v-flex sx-12 class="text-center">
+            <v-progress-linear
+                    indeterminate
+                    color="primary"
+            ></v-progress-linear>
+        </v-flex>
+    </div>
 </template>
 
 <script>
@@ -62,6 +70,9 @@
             },
             ads () {
                 return this.$store.getters.ads;
+            },
+            loading () {
+                return this.$store.getters.loading
             }
         }
     }

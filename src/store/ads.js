@@ -13,33 +13,14 @@ class Ad {
 
 export default {
     state: {
-        ads: [
-            {
-                title: 'Title1',
-                description: 'description1',
-                promo: true,
-                imageSrc: 'https://via.placeholder.com/1200x600/OOOOOO/FFFFFF?text=Slider1',
-                id: 123
-            },
-            {
-                title: 'Title2',
-                description: 'description2',
-                promo: true,
-                imageSrc: 'https://via.placeholder.com/1200x600/OOOOOO/FFFFFF?text=Slider2',
-                id: 124
-            },
-            {
-                title: 'Title3',
-                description: 'description3',
-                promo: false,
-                imageSrc: 'https://via.placeholder.com/1200x600/OOOOOO/FFFFFF?text=Slider3',
-                id: 125
-            },
-        ]
+        ads: []
     },
     mutations: {
         createAd(state, payload) {
             state.ads.push(payload)
+        },
+        loadAds (state, payload) {
+            state.ads = payload
         }
     },
     actions: {
@@ -55,6 +36,37 @@ export default {
 
                 commit('setLoading', false)
                 commit('createAd', {...newAd, id: ad.key})
+            } catch (e) {
+                commit('setError', e.message)
+                commit('setLoading', false)
+                throw e
+            }
+        },
+        async fetchAds ({commit}) {
+            commit('clearError')
+            commit('setLoading', true)
+
+            const resultAds = []
+
+            try {
+                /**
+                 * метов once разово возвращает все эелменты массива
+                 * @type {firebase.database.DataSnapshot}
+                 */
+                const fbVal = await fb.database().ref('ads').once('value')
+                const ads = fbVal.val() // val() - для получения значения массива
+
+                Object.keys(ads).forEach(key => {
+                    const ad  = ads[key]
+                    resultAds.push(
+                        {...ad, id: key}
+                    )
+                })
+
+                console.log(resultAds)
+
+                commit ('loadAds', resultAds)
+                commit('setLoading', false)
             } catch (e) {
                 commit('setError', e.message)
                 commit('setLoading', false)

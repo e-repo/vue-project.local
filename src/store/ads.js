@@ -5,7 +5,7 @@ class Ad {
         this.title          = payload.title
         this.description    = payload.description
         this.ownerId        = payload.ownerId
-        this.imageSrc       = payload.imageSrc
+        this.imageSrc       = payload.imageSrc ? payload.imageSrc : ''
         this.promo          = payload.promo ? payload.promo : false
         this.id             = payload.id ? payload.id : null
     }
@@ -21,6 +21,14 @@ export default {
         },
         loadAds (state, payload) {
             state.ads = payload
+        },
+        updateAd (state, {title, description, id}) {
+            const ad = state.ads.find(a => {
+                return a.id === id
+            })
+
+            ad.title = title
+            ad.description = description
         }
     },
     actions: {
@@ -28,14 +36,42 @@ export default {
             commit('clearError')
             commit('setLoading', true)
 
+            const image = payload.image
+
             try {
                 payload.ownerId = getters.user.id
 
                 const newAd = new Ad(payload)
                 const ad = await fb.database().ref('ads').push(newAd)
+                const imageExt = image.name.slice(image.name.lastIndexOf('.'))
+
+                /**
+                 *
+                 * Добавляем изображение в firebase storage
+                 *
+                 */
+                const fileData = await fb.storage().ref(`ads/${ad.key}${imageExt}`).put(image)
+
+                /**
+                 *
+                 * Получаем ссылку на загруженное изображение
+                 * fileData.ref.fullPath - содержит расположение файла в хранилище
+                 * getDownloaduRL - метод для оплучения ссылки на картинку
+                 * (https://firebase.google.com/docs/storage/web/download-files)
+                 *
+                 */
+                const imageSrc = await fb.storage().ref().child(fileData.ref.fullPath).getDownloadURL()
+
+                /**
+                 *
+                 * Обновляем картинку в базе данных
+                 * метов child для поиска элемента в таблице
+                 *
+                 */
+                await fb.database().ref('ads').child(ad.key).update({imageSrc})
 
                 commit('setLoading', false)
-                commit('createAd', {...newAd, id: ad.key})
+                commit('createAd', {...newAd, id: ad.key, imageSrc})
             } catch (e) {
                 commit('setError', e.message)
                 commit('setLoading', false)
@@ -63,9 +99,22 @@ export default {
                     )
                 })
 
-                console.log(resultAds)
-
                 commit ('loadAds', resultAds)
+                commit('setLoading', false)
+            } catch (e) {
+                commit('setError', e.message)
+                commit('setLoading', false)
+                throw e
+            }
+        },
+        async updateAd ({commit}, {title, description, id}) {
+            commit('clearError')
+            commit('setLoading', true)
+            
+            try {
+                await fb.database().ref('ads').child(id).update({title, description})
+                commit('updateAd', {title, description, id})
+
                 commit('setLoading', false)
             } catch (e) {
                 commit('setError', e.message)
@@ -87,8 +136,10 @@ export default {
                 return ad.promo
             });
         },
-        myAds (state) {
-            return state.ads
+        myAds (state, getters) {
+            return state.ads.filter(ad => {
+                return ad.ownerId === getters.user.id
+            })
         },
         adById (state) {
             /**

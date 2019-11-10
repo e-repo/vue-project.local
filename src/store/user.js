@@ -55,7 +55,7 @@ export default {
                 /**
                  * firebase method для взаимодействия с firebase
                  */
-                const user = await fb.auth().signInWithEmailAndPassword(email, password)
+                const {user} = await fb.auth().signInWithEmailAndPassword(email, password)
                 commit ('setUser', new User(user.uid))
                 commit ('setLoading', false)
             } catch (e) {

@@ -31,18 +31,26 @@
             <v-flex xs-12 sm6 offset-sm3>
                 <v-btn
                     class="white--text warning"
+                    @click="fileUpload"
                 >
                     Upload
                     <v-icon right dark>mdi-cloud-upload</v-icon>
                 </v-btn>
+                <input
+                    ref="fileUpload"
+                    type="file"
+                    accept="image/*"
+                    style="display: none"
+                    @change="onFileChange"
+                >
             </v-flex>
         </v-layout>
-        <v-layout class="mt-3">
+        <v-layout row class="mt-3">
             <v-flex xs-12 sm6 offset-sm3>
-                <img src="" height="100" alt="">
+                <img :src="imageSrc" height="100" alt="" v-if="imageSrc">
             </v-flex>
         </v-layout>
-        <v-layout class="mt-3">
+        <v-layout row class="mt-3">
             <v-flex xs-12 sm6 offset-sm3>
                 <v-switch
                     v-model="promo"
@@ -50,14 +58,14 @@
                 ></v-switch>
             </v-flex>
         </v-layout>
-        <v-layout>
+        <v-layout row>
             <v-flex xs-12 sm6 offset-sm3>
                 <v-spacer></v-spacer>
                 <v-btn
                     class="success"
                     @click="createAd"
                     :loading="loading"
-                    :disabled="!valid || loading"
+                    :disabled="!valid || !image || loading"
                 >Create ad</v-btn>
             </v-flex>
         </v-layout>
@@ -73,17 +81,19 @@
             title: '',
             description: '',
             promo: false,
-            valid: false
+            valid: false,
+            image: null,
+            imageSrc: ''
         }),
         methods: {
             createAd () {
-                if (this.$refs.form.validate()) {
+                if (this.$refs.form.validate() && this.image) {
                     // logic
                     const ad = {
                         title: this.title,
                         description: this.description,
                         promo: this.promo,
-                        imageSrc: 'https://s14.stc.all.kpcdn.net/share/i/12/10240851/inx960x640.jpg'
+                        image: this.image
                     }
 
                     this.$store.dispatch('createAd', ad)
@@ -92,6 +102,18 @@
                         })
                         .catch(() => {})
                 }
+            },
+            fileUpload () {
+                this.$refs.fileUpload.click()
+            },
+            onFileChange (event) {
+                const file = event.target.files[0]
+                const reader = new FileReader()
+                reader.readAsDataURL(file)
+                reader.onload = () => {
+                    this.imageSrc = reader.result
+                }
+                this.image = file
             }
         },
         computed: {
